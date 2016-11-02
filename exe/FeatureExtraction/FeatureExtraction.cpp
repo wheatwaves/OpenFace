@@ -954,7 +954,7 @@ void outputAllFeatures(std::ofstream* output_file, bool output_2D_landmarks, boo
 		if(face_model.tracking_initialised)
 		{
 			*output_file << ", " << pose_estimate[0] << ", " << pose_estimate[1] << ", " << pose_estimate[2]
-				<< ", " << pose_estimate[3] << ", " << pose_estimate[4] << ", " << pose_estimate[5] << x_angle << y_angle;
+				<< ", " << pose_estimate[3] << ", " << pose_estimate[4] << ", " << pose_estimate[5] << ", " << x_angle << ", " << y_angle;
 		}
 		else
 		{
