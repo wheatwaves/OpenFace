@@ -9,6 +9,6 @@ for root, dirs, files in list_dirs:
 			with open(root + file) as f:
 				for line in f.readlines():
 					line = line.strip().split('\t')
-					s, e = float(line[2]), float(line[4])
+					s, e = float(line[3]), float(line[5])
 					looking_down_intervals[name].append((s, e))
 print looking_down_intervals
