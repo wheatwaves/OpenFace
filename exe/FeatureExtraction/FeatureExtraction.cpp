@@ -311,11 +311,11 @@ int main (int argc, char **argv)
 
 	// By default output all parameters, but these can be turned off to get smaller files or slightly faster processing times
 	// use -no2Dfp, -no3Dfp, -noMparams, -noPose, -noAUs, -noGaze to turn them off
-	bool output_2D_landmarks = true;
-	bool output_3D_landmarks = true;
-	bool output_model_params = true;
+	bool output_2D_landmarks = false;
+	bool output_3D_landmarks = false;
+	bool output_model_params = false;
 	bool output_pose = true; 
-	bool output_AUs = true;
+	bool output_AUs = false;
 	bool output_gaze = true;
 
 	get_output_feature_params(output_similarity_align, output_hog_align_files, sim_scale, sim_size, grayscale, verbose, dynamic,
@@ -857,7 +857,7 @@ void prepareOutputFile(std::ofstream* output_file, bool output_2D_landmarks, boo
 
 	if (output_pose)
 	{
-		*output_file << ", pose_Tx, pose_Ty, pose_Tz, pose_Rx, pose_Ry, pose_Rz";
+		*output_file << ", pose_Tx, pose_Ty, pose_Tz, pose_Rx, pose_Ry, pose_Rz, x_angle, y_angle";
 	}
 
 	if (output_2D_landmarks)
@@ -929,6 +929,18 @@ void outputAllFeatures(std::ofstream* output_file, bool output_2D_landmarks, boo
 
 	*output_file << frame_count + 1 << ", " << time_stamp << ", " << confidence << ", " << detection_success;
 
+	cv::Vec6d headPose = LandmarkDetector::GetPoseCamera(face_model, fx, fy, cx, cy);
+	cv::Vec3d eulerAngles(headPose(3), headPose(4), headPose(5));
+	cv::Matx33d rotMat = LandmarkDetector::Euler2RotationMatrix(eulerAngles);
+	cv::Point3f gaze_point = (gazeDirection0 + gazeDirection1)/2;
+	double gaze_diff = acos(gazeDirection0.dot(gazeDirection1));
+	cv::Vec3d gaze(gaze_point.x, gaze_point.y, gaze_point.z);
+	gaze = rotMat * gaze;
+
+	double x_angle = atan2(gaze[0], -gaze[2]);
+	double y_angle = atan2(gaze[1], -gaze[2]);
+
+
 	// Output the estimated gaze
 	if (output_gaze)
 	{
@@ -942,11 +954,11 @@ void outputAllFeatures(std::ofstream* output_file, bool output_2D_landmarks, boo
 		if(face_model.tracking_initialised)
 		{
 			*output_file << ", " << pose_estimate[0] << ", " << pose_estimate[1] << ", " << pose_estimate[2]
-				<< ", " << pose_estimate[3] << ", " << pose_estimate[4] << ", " << pose_estimate[5];
+				<< ", " << pose_estimate[3] << ", " << pose_estimate[4] << ", " << pose_estimate[5] << x_angle << y_angle;
 		}
 		else
 		{
-			*output_file << ", 0, 0, 0, 0, 0, 0";
+			*output_file << ", 0, 0, 0, 0, 0, 0, 0, 0";
 		}
 	}
 
