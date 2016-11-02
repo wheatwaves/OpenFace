@@ -1,5 +1,5 @@
 import os
-list_dirs = os.walk('/usr0/home/senw1/OpenFace/annotation_txt')
+list_dirs = os.walk('/usr0/home/senw1/OpenFace/annotation_txt/')
 looking_down_intervals = {}
 for root, dirs, files in list_dirs:
 	for file in files:
