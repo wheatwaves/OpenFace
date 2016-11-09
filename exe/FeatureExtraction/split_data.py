@@ -20,6 +20,8 @@ for root, dirs, files in feature_dirs:
 				with open(root + file) as f:
 					for line in f.readlines()[1:]:
 						timestamp = float(line.split(',')[1].strip())
+						if timestamp > 120:
+							break
 						flag = False
 						for interval in looking_down_intervals[name]:
 							if timestamp >= interval[0] and timestamp <= interval[1]:
@@ -28,7 +30,7 @@ for root, dirs, files in feature_dirs:
 						if flag:
 							with open('/usr0/home/senw1/OpenFace/training_data/positive.txt', 'a') as g:
 								g.write(line)
-						else:
+						else :
 							with open('/usr0/home/senw1/OpenFace/training_data/negative.txt', 'a') as g:
 								g.write(line)
 
