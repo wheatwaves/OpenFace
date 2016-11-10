@@ -28,10 +28,10 @@ for root, dirs, files in feature_dirs:
 								flag = True
 								break
 						if flag:
-							with open('/usr0/home/senw1/OpenFace/training_data/positive.txt', 'a') as g:
+							with open('/usr0/home/senw1/OpenFace/training_data/' + name + '_positive.txt', 'a') as g:
 								g.write(line)
 						else :
-							with open('/usr0/home/senw1/OpenFace/training_data/negative.txt', 'a') as g:
+							with open('/usr0/home/senw1/OpenFace/training_data/' + name + '_negative.txt', 'a') as g:
 								g.write(line)
 
 
